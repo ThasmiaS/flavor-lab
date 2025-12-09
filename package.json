@@ -4,5 +4,11 @@
   },
   "scripts": {
     "generate-config": "node generate-config.js"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-react": "^5.1.2",
+    "react": "^19.2.1",
+    "react-dom": "^19.2.1",
+    "vite": "^7.2.7"
   }
 }
