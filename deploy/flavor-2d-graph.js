@@ -124,7 +124,7 @@ async function initialize2DGraph() {
                         border: color
                     }
                 },
-                size: 20,
+                size: 16,
                 font: {
                     color: '#ffffff',
                     size: 12,
@@ -173,8 +173,8 @@ async function initialize2DGraph() {
             nodes: {
                 shape: 'dot',
                 scaling: {
-                    min: 15,
-                    max: 30
+                    min: 12,
+                    max: 24
                 },
                 font: {
                     size: 12,
@@ -200,16 +200,16 @@ async function initialize2DGraph() {
                 enabled: true,
                 stabilization: {
                     enabled: true,
-                    iterations: 200,
+                    iterations: 500,
                     fit: true
                 },
                 barnesHut: {
-                    gravitationalConstant: -2000,
-                    centralGravity: 0.1,
-                    springLength: 150,
-                    springConstant: 0.05,
-                    damping: 0.15,
-                    avoidOverlap: 0.5
+                    gravitationalConstant: -8000,
+                    centralGravity: 0.01,
+                    springLength: 400,
+                    springConstant: 0.01,
+                    damping: 0.5,
+                    avoidOverlap: 2.0
                 }
             },
             interaction: {
@@ -221,6 +221,23 @@ async function initialize2DGraph() {
         };
         
         graph2DInstance = new vis.Network(container, data, options);
+        
+        // After stabilization, apply even stronger separation settings
+        graph2DInstance.once('stabilizationEnd', function() {
+            graph2DInstance.setOptions({
+                physics: {
+                    enabled: true,
+                    barnesHut: {
+                        gravitationalConstant: -12000,
+                        centralGravity: 0.005,
+                        springLength: 500,
+                        springConstant: 0.008,
+                        damping: 0.7,
+                        avoidOverlap: 3.0
+                    }
+                }
+            });
+        });
         
         // Add event listeners
         graph2DInstance.on('hoverNode', function(params) {

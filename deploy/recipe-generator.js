@@ -1243,7 +1243,91 @@ async function generateAndDisplayRecipes() {
     }
 }
 
+/**
+ * Test Pexels API connection
+ * Call this from browser console: window.testPexelsAPI()
+ */
+async function testPexelsAPI() {
+    console.log('🧪 Testing Pexels API connection...');
+    
+    await getConfig();
+    const currentPexelsKey = CONFIG_LOADED.PEXELS_API_KEY || PEXELS_API_KEY || '';
+    const apiKeyTrimmed = currentPexelsKey.trim();
+    
+    console.log('📋 API Key Status:');
+    console.log('   CONFIG_LOADED.PEXELS_API_KEY:', CONFIG_LOADED.PEXELS_API_KEY ? `Set (${CONFIG_LOADED.PEXELS_API_KEY.substring(0, 10)}...)` : 'NOT SET');
+    console.log('   PEXELS_API_KEY:', PEXELS_API_KEY ? `Set (${PEXELS_API_KEY.substring(0, 10)}...)` : 'NOT SET');
+    console.log('   Final key used:', apiKeyTrimmed ? `Set (${apiKeyTrimmed.substring(0, 10)}...)` : 'NOT SET');
+    
+    if (!apiKeyTrimmed) {
+        console.error('❌ Pexels API key is not set!');
+        console.error('   To fix:');
+        console.error('   1. Create a .env file in the project root');
+        console.error('   2. Add: PEXELS_API_KEY=your_api_key_here');
+        console.error('   3. Get a free key at: https://www.pexels.com/api/');
+        console.error('   4. Restart the server (python3 run_server.py)');
+        return false;
+    }
+    
+    try {
+        // Test with a simple query
+        const testQuery = 'food';
+        const url = `https://api.pexels.com/v1/search?query=${encodeURIComponent(testQuery)}&per_page=1`;
+        
+        console.log('🔍 Testing API call...');
+        console.log('   URL:', url);
+        console.log('   Authorization header:', apiKeyTrimmed.substring(0, 10) + '...');
+        
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': apiKeyTrimmed
+            }
+        });
+        
+        console.log('📡 Response status:', response.status, response.statusText);
+        
+        if (!response.ok) {
+            const errorText = await response.text();
+            let errorData;
+            try {
+                errorData = JSON.parse(errorText);
+            } catch (e) {
+                errorData = { error: errorText };
+            }
+            console.error('❌ API test failed:', errorData);
+            
+            if (response.status === 401) {
+                console.error('   ⚠️ 401 Unauthorized - Your API key is invalid or expired');
+                console.error('   Please check your PEXELS_API_KEY in the .env file');
+            } else if (response.status === 429) {
+                console.error('   ⚠️ 429 Rate Limit - Too many requests');
+            }
+            return false;
+        }
+        
+        const data = await response.json();
+        console.log('✅ API test successful!');
+        console.log('   Response:', data);
+        
+        if (data.photos && data.photos.length > 0) {
+            console.log('   Found', data.photos.length, 'photo(s)');
+            console.log('   Sample image URL:', data.photos[0].src.large);
+            return true;
+        } else {
+            console.warn('   ⚠️ No photos returned (but API connection works)');
+            return true;
+        }
+    } catch (error) {
+        console.error('❌ API test error:', error);
+        console.error('   This might be a network issue or CORS problem');
+        return false;
+    }
+}
+
 // Export for use in HTML
 window.recipeGenerator = {
     generateAndDisplayRecipes
 };
+
+// Export test function for debugging
+window.testPexelsAPI = testPexelsAPI;
