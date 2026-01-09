@@ -9,7 +9,9 @@ This groundbreaking, interactive application unlocks the hidden chemistry behind
 It's the essential tool for chefs, mixologists, and ambitious home cooks who want to break boundaries, create signature dishes, and achieve culinary genius: all rooted in pure, delicious chemistry.
 
 ## 🚀 Features
-
+![demo](./3d.gif) 
+![demo](./2d.gif)
+![demo](./search.gif) 
 - **Interactive Ingredient Network**: Search and explore ingredients in a beautiful 2D network graph
 - **3D Flavor Graph**: Visualize ingredient relationships in immersive 3D space
 - **Scientifically-Backed Pairings**: Get flavor matches based on shared aromatic compounds and co-occurance
