@@ -17,7 +17,7 @@ It's the essential tool for chefs, mixologists, and ambitious home cooks who wan
 - **Flavor Preferences**: Adjust umami, salty, sweet, sour, and bitter sliders to customize recipes
 - **Category & Dietary Filters**: Filter ingredients by category and dietary restrictions
 - **Ingredient Tracking**: Build your ingredient list and generate recipes
-
+![demo](./recipegen.gif)
 ## 🛠️ Tech Stack
 
 ### Frontend
